@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SudokuSolver", "SudokuSolver\SudokuSolver.vcxproj", "{FCA20B22-17B2-484D-B8F3-72AD7E662A05}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCA20B22-17B2-484D-B8F3-72AD7E662A05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FCA20B22-17B2-484D-B8F3-72AD7E662A05}.Debug|Win32.Build.0 = Debug|Win32
+		{FCA20B22-17B2-484D-B8F3-72AD7E662A05}.Release|Win32.ActiveCfg = Release|Win32
+		{FCA20B22-17B2-484D-B8F3-72AD7E662A05}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
