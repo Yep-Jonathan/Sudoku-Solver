@@ -49,7 +49,7 @@ int main (int argc, char * argv[]) {
 	}
 	else 
 	{
-		cout << "One argument must be provided to specify the output file." << endl;
+		cout << "One argument must be provided to specify the input file." << endl;
 	}
 
 

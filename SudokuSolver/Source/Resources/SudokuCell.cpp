@@ -1,7 +1,8 @@
 #include "SudokuCell.h"
+#include <sstream>
 
 // shared pointer make command:
-SudokuCellPtr makeSudokuCell (int value) {
+SudokuCellPtr makeSudokuCellPtr (int value) {
 	return std::make_shared<SudokuCell>(value);
 }
 
@@ -12,21 +13,35 @@ SudokuCell::SudokuCell() {
 }
 
 SudokuCell::SudokuCell(int value) {
-	mValue = SudokuNumberFromInt (value);
-	mProductPossibilities = 0;
-	mNumPossibilities = 1;
+	if (value != 0) {
+		mValue = SudokuNumberFromInt (value);
+		mProductPossibilities = 0;
+		mNumPossibilities = 1;
+	} else {
+		mValue = SudokuNumber::NONUM;
+		mProductPossibilities = SudokuCoPrime::ALLPRODUCT;
+		mNumPossibilities = 9;
+	}
 }
 
 SudokuCell::~SudokuCell() {
 
 }
 
-
+std::string SudokuCell::print() {
+	if (mValue != SudokuNumber::NONUM) {
+		std::stringstream ss;
+		ss << mValue;
+		return ss.str();
+	} else {
+		return "-";
+	}
+}
 
 
 // Private
 
-SudokuNumber SudokuNumberFromInt (int value) {
+SudokuNumber SudokuCell::SudokuNumberFromInt (int value) {
 	switch(value) {
 	case 1:		return SudokuNumber::ONE;		break;
 	case 2:		return SudokuNumber::TWO;		break;
@@ -41,7 +56,7 @@ SudokuNumber SudokuNumberFromInt (int value) {
 	}
 }
 
-SudokuCoPrime SudokuCoPrimeFromInt (int value) {
+SudokuCoPrime::SudokuCoPrime SudokuCell::SudokuCoPrimeFromInt (int value) {
 	switch(value) {
 	case 1:		return SudokuCoPrime::ONE;			break;
 	case 2:		return SudokuCoPrime::TWO;			break;

@@ -1,12 +1,17 @@
-#include <memory>
+#ifndef SUDOKUCELL_HEADER
+#define SUDOKUCELL_HEADER
 
+#include <memory>
+#include <string>
 
 enum SudokuNumber { NONUM = 0, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE };
 
 
 // Use co-prime numbers to determine what a cell is.
-enum SudokuCoPrime { ONE = 11, TWO = 17, THREE = 13, FOUR = 19, FIVE = 5,
-	SIX = 6, SEVEN = 7, EIGHT = 23, NINE = 9, ALLPRODUCT = 2007835830 };
+namespace SudokuCoPrime {
+	enum SudokuCoPrime { ONE = 11, TWO = 17, THREE = 13, FOUR = 19, FIVE = 5,
+		SIX = 6, SEVEN = 7, EIGHT = 23, NINE = 9, ALLPRODUCT = 2007835830 };
+};
 
 
 
@@ -16,7 +21,7 @@ public:
 	SudokuCell(int value);
 	virtual ~SudokuCell();
 
-
+	std::string print();
 
 private:
 	SudokuNumber mValue;
@@ -24,11 +29,13 @@ private:
 	int mNumPossibilities;
 
 	SudokuNumber SudokuNumberFromInt (int value);
-	SudokuCoPrime SudokuCoPrimeFromInt (int value);
+	SudokuCoPrime::SudokuCoPrime SudokuCoPrimeFromInt (int value);
 
 
 
 };
 
 typedef std::shared_ptr<SudokuCell> SudokuCellPtr;
-SudokuCellPtr makeSudokuCell(int value);
+SudokuCellPtr makeSudokuCellPtr(int value);
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef SUDOKUCOLUMN_HEADER
+#define SUDOKUCOLUMN_HEADER
+
 #include "SudokuSet.h"
 
 
@@ -13,3 +16,5 @@ private:
 
 
 };
+
+#endif

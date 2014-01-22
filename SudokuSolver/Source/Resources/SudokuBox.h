@@ -1,5 +1,7 @@
-#include "SudokuSet.h"
+#ifndef SUDOKUBOX_HEADER
+#define SUDOKUBOX_HEADER
 
+#include "SudokuSet.h"
 
 
 class SudokuBox : public SudokuSet {
@@ -15,3 +17,5 @@ private:
 
 
 };
+
+#endif

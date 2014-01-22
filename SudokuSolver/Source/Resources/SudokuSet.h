@@ -1,3 +1,5 @@
+#ifndef SUDOKUSET_HEADER
+#define SUDOKUSET_HEADER
 
 #include <vector>
 #include "SudokuCell.h"
@@ -15,9 +17,11 @@ public:
 
 
 
-private:
+protected:
 	std::vector<SudokuCellPtr> mCells;
 	int mPosition;
 
 
 };
+
+#endif

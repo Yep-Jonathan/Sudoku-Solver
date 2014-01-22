@@ -1,4 +1,18 @@
 #include "SudokuGrid.h"
+#include <iostream>
+
+SudokuRowPtr makeSudokuRowPtr(int position) {
+	return std::make_shared<SudokuRow>(position);
+}
+
+SudokuColumnPtr makeSudokuColumnPtr(int position) {
+	return std::make_shared<SudokuColumn>(position);
+}
+
+SudokuBoxPtr makeSudokuBoxPtr(int position) {
+	return std::make_shared<SudokuBox>(position);
+}
+
 
 SudokuGrid::SudokuGrid(std::string inFile) {
 	
@@ -10,7 +24,45 @@ SudokuGrid::SudokuGrid(std::string inFile) {
 	}
 
 	// Read values from inFile and store them in the correct locations
+	std::ifstream input;
+	input.open(inFile);
+	SudokuCellPtr cell;
+	int cellValue;
+
+	// Constant time for loop
+	for (int row = 0; row < 9; ++row) {
+		for (int column = 0; column < 9; ++column) {
+
+			// Read the next cell value
+			if (!(input >> cellValue)) {
+				std::cout << "Inputting failed, please check your input file" << std::endl;
+			}
+
+			// Make the cell, and add it to the appropriate structure
+			cell = makeSudokuCellPtr(cellValue);
+			mRows[row].addCell(cell);
+			mColumns[column].addCell(cell);
+			mBoxes[3*(row/3) + (column/3)].addCell(cell);
+		}
+	}
+
+}
+
+SudokuGrid::~SudokuGrid() {
+
+}
+
+bool SudokuGrid::solve() {
+	return true;
+}
 
 
-
+void SudokuGrid::print() {
+	for (int row = 0; row < 9; ++row) {
+		if (row % 3 == 0) {
+			std::cout << "-------------------" << std::endl;
+		}
+		std::cout << "|" << mRows[row].print() << "|" << std::endl;
+	}
+	std::cout << "-------------------" << std::endl;
 }
