@@ -1,19 +1,6 @@
 #include "SudokuGrid.h"
 #include <iostream>
 
-SudokuRowPtr makeSudokuRowPtr(int position) {
-	return std::make_shared<SudokuRow>(position);
-}
-
-SudokuColumnPtr makeSudokuColumnPtr(int position) {
-	return std::make_shared<SudokuColumn>(position);
-}
-
-SudokuBoxPtr makeSudokuBoxPtr(int position) {
-	return std::make_shared<SudokuBox>(position);
-}
-
-
 SudokuGrid::SudokuGrid(std::string inFile) {
 	
 	// Initialize the Rows and Columns
@@ -53,6 +40,15 @@ SudokuGrid::~SudokuGrid() {
 }
 
 bool SudokuGrid::solve() {
+
+	setProductPossibilities();
+	while (!isSolved()) {
+		while (setByOnePossibility()) { }		// will continue to set by one possibility until it cannot anymore
+		if (!isSolved()) {
+			return true;
+		}
+	}
+
 	return true;
 }
 
@@ -65,4 +61,52 @@ void SudokuGrid::print() {
 		std::cout << "|" << mRows[row].print() << "|" << std::endl;
 	}
 	std::cout << "-------------------" << std::endl;
+}
+
+
+
+// Private Functions
+bool SudokuGrid::isSolved() {
+	int countSolved = 0;
+
+	// Count the number of solved cells (TODO: checking if the solution is correct)
+	for (int row = 0; row < 9; ++row) {
+		for (std::vector<SudokuCellPtr>::iterator i = mRows[row].mCells.begin(); i != mRows[row].mCells.end(); ++i) {
+			if ((*i)->isSet()) { ++countSolved; } 
+		}
+	}
+	return (countSolved == 81);
+}
+
+
+void SudokuGrid::setProductPossibilities() {
+
+	// Iterate through the row vectors, and call eliminate on the corresponding row/column/box if a value exists in the cell
+	for (int row = 0; row < 9; ++row) {
+		for (std::vector<SudokuCellPtr>::iterator i = mRows[row].mCells.begin(); i != mRows[row].mCells.end(); ++i) {
+			if ((*i)->getNumber() != SudokuNumber::NONUM) {
+				mRows[row].eliminateCoPrime((*i)->getCoPrime());
+				mColumns[i - mRows[row].mCells.begin()].eliminateCoPrime((*i)->getCoPrime());
+				mBoxes[3*(row/3) + ((i - mRows[row].mCells.begin())/3)].eliminateCoPrime((*i)->getCoPrime());
+			}
+		}	
+	}
+}
+
+bool SudokuGrid::setByOnePossibility() {
+	bool setAtLeastOneValue = false;
+
+	// Iterate through the row vectors, and check if only one possibility exists for values that have not been set yet.  If a value has been set, call eliminate on the corresponding row/column/box.
+	for (int row = 0; row < 9; ++row) {
+		for (std::vector<SudokuCellPtr>::iterator i = mRows[row].mCells.begin(); i != mRows[row].mCells.end(); ++i) {
+			if ((*i)->getNumber() == SudokuNumber::NONUM && (*i)->checkOnePossibility()) {
+				mRows[row].eliminateCoPrime((*i)->getCoPrime());
+				mColumns[i - mRows[row].mCells.begin()].eliminateCoPrime((*i)->getCoPrime());
+				mBoxes[3*(row/3) + ((i - mRows[row].mCells.begin())/3)].eliminateCoPrime((*i)->getCoPrime());
+				setAtLeastOneValue = true;
+			}
+		}	
+	}
+	
+	return setAtLeastOneValue;
 }

@@ -15,12 +15,12 @@ public:
 
 	virtual void addCell(SudokuCellPtr);
 
+	void eliminateCoPrime(SudokuCoPrime::SudokuCoPrime);
 
-
-protected:
 	std::vector<SudokuCellPtr> mCells;
-	int mPosition;
 
+protected:	
+	int mPosition;
 
 };
 

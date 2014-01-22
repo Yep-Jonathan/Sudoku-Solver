@@ -14,7 +14,7 @@
  *
  * Placement by Elimination:
  *		- If a cell can be determined to be the only possible location for a particular number, that number must occupy that space.
- *			- This is determined through examining two of the three row, column, and 3x3 sub-grids for common/
+ *
  *
  */
 

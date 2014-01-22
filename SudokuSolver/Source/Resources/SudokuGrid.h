@@ -8,15 +8,6 @@
 #include "SudokuBox.h"
 #include "SudokuCell.h"
 
-typedef std::shared_ptr<SudokuRow> SudokuRowPtr;
-SudokuRowPtr makeSudokuRowPtr(int position);
-
-typedef std::shared_ptr<SudokuColumn> SudokuColumnPtr;
-SudokuColumnPtr makeSudokuColumnPtr(int position);
-
-typedef std::shared_ptr<SudokuBox> SudokuBoxPtr;
-SudokuBoxPtr makeSudokuBoxPtr(int position);
-
 
 
 class SudokuGrid {
@@ -29,6 +20,10 @@ public:
 
 
 private:
+	bool isSolved();
+	
+	void setProductPossibilities();		// Iterates through the grid and eliminates product possibilities
+	bool setByOnePossibility();
 
 	SudokuRow mRows[9];
 	SudokuColumn mColumns[9];
