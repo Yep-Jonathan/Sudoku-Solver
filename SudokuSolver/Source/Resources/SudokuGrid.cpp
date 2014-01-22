@@ -40,6 +40,7 @@ SudokuGrid::~SudokuGrid() {
 }
 
 bool SudokuGrid::solve() {
+	int count = 0;
 
 	while (!isSolved()) {
 		setProductPossibilities();
@@ -47,7 +48,14 @@ bool SudokuGrid::solve() {
 		// Will perform one or more of the following solving algorithms (basic -> more advanced)
 		if (setByOnePossibility()) { }
 		else if (setByOnlyOnePossibilityInSet()) { }
-		
+		else if (eliminateByBoxes()) { }
+
+		++count;
+		// At least one value should be set each iteration
+		if (count > 200) {
+			print();
+			return false;
+		}
 	}
 	
 	return true;
@@ -124,4 +132,65 @@ bool SudokuGrid::setByOnlyOnePossibilityInSet() {
 
 	return setAtLeastOneValue;
 
+}
+
+bool SudokuGrid::eliminateByBoxes() {
+	bool eliminateAtLeastOneValue = false;
+	SudokuNumber numToLookFor;
+	bool hasNumber;
+	int possiblePlaces = 0;
+	int loc1 = -1, loc2 = -1, loc3 = -1;
+
+
+	for (int box = 0; box < 9; ++box) {
+		for (int j = 1; j < 10; ++j) {
+			numToLookFor = SudokuNumberFromInt(j);
+			hasNumber = false;
+			possiblePlaces = 0;
+			loc1 = -1; loc2 = -1, loc3 = -1;
+
+			// Check each box if there is only two/three locations for a value.  If so, check if these are aligned in a row/column and if so eliminate them from the row/column
+			for (std::vector<SudokuCellPtr>::iterator i = mBoxes[box].mCells.begin(); i != mBoxes[box].mCells.end(); ++i) {
+				if ((*i)->isSet() && (*i)->getNumber() == numToLookFor) {
+					hasNumber = true;
+				}
+				
+				if (!(*i)->isSet() && (*i)->canBe(numToLookFor)) {
+					possiblePlaces += 1;
+					if (loc1 == -1) {
+						loc1 = (i - mBoxes[box].mCells.begin());
+					} else if (loc2 == -1) {
+						loc2 = (i - mBoxes[box].mCells.begin());
+					} else if (loc3 == -1) {
+						loc3 = (i - mBoxes[box].mCells.begin());
+					}
+				}
+			}
+			
+			if (!hasNumber && possiblePlaces == 2) {
+				// we know loc1 must be less than loc2
+				// Check if they are in the same column, and eliminate the number from that column if so
+				if (loc1 % 3 == loc2 % 3) {
+					mColumns[(box % 3)*3 + (loc1 % 3)].eliminateCoPrimeWithSkip(SudokuCoPrimeFromInt(numToLookFor), box / 3);
+					eliminateAtLeastOneValue = true;
+				} else if ((loc1 / 3) == (loc2 / 3)) {
+					mRows[(box / 3)*3 + (loc1 / 3)].eliminateCoPrimeWithSkip(SudokuCoPrimeFromInt(numToLookFor), box % 3);
+					eliminateAtLeastOneValue = true;
+				}
+			}
+
+			if (!hasNumber && possiblePlaces == 3) {
+				// we know loc1 < loc2 < loc3
+				if (loc1 % 3 == loc2 % 3 && loc1 % 3 == loc3 % 3) {
+					mColumns[(box % 3)*3 + (loc1 % 3)].eliminateCoPrimeWithSkip(SudokuCoPrimeFromInt(numToLookFor), box / 3);
+					eliminateAtLeastOneValue = true;
+				} else if ((loc1 / 3) == (loc2 / 3) && (loc1 / 3) == (loc3 / 3)) {
+					mRows[(box / 3)*3 + (loc1 / 3)].eliminateCoPrimeWithSkip(SudokuCoPrimeFromInt(numToLookFor), box % 3);
+					eliminateAtLeastOneValue = true;
+				}
+			}
+		}
+	}
+
+	return eliminateAtLeastOneValue;
 }

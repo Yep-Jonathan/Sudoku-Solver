@@ -28,6 +28,8 @@ private:
 	bool setByOnePossibility();				// Scans the whole grid for any boxes where only one value can go
 	bool setByOnlyOnePossibilityInSet();	// Scans the SudokuSets, and places a value if it can only be in one location in the set
 
+	bool eliminateByBoxes();
+
 	SudokuRow mRows[9];
 	SudokuColumn mColumns[9];
 	SudokuBox mBoxes[9];

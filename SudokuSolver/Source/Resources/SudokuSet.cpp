@@ -25,6 +25,15 @@ void SudokuSet::eliminateCoPrime(SudokuCoPrime::SudokuCoPrime value) {
 	}
 }
 
+void SudokuSet::eliminateCoPrimeWithSkip(SudokuCoPrime::SudokuCoPrime value, int skip) {
+	for (std::vector<SudokuCellPtr>::iterator i = mCells.begin(); i != mCells.end(); ++i) {
+		if (!(*i)->isSet() && ((i - mCells.begin())/3) != skip) {
+			(*i)->eliminateNumber(value);
+		}
+	}
+}
+
+
 bool SudokuSet::setByOnePossibility() {
 	bool setAtLeastOneValue = false;
 	SudokuNumber numToLookFor;

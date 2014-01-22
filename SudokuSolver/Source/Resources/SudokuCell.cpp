@@ -1,6 +1,5 @@
 #include "SudokuCell.h"
 #include <sstream>
-#include <iostream>
 
 // shared pointer make command:
 SudokuCellPtr makeSudokuCellPtr (int value) {
@@ -73,7 +72,6 @@ bool SudokuCell::checkOnePossibility() {
 }
 
 void SudokuCell::set(SudokuNumber value) {
-	std::cout << value << std::endl;
 	mValue = value;
 	mProductPossibilities = 0;
 	mNumPossibilities = 1;
