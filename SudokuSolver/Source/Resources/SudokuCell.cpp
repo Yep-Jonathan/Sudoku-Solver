@@ -1,5 +1,6 @@
 #include "SudokuCell.h"
 #include <sstream>
+#include <iostream>
 
 // shared pointer make command:
 SudokuCellPtr makeSudokuCellPtr (int value) {
@@ -50,6 +51,10 @@ bool SudokuCell::isSet() {
 	return (mValue != SudokuNumber::NONUM);
 }
 
+bool SudokuCell::canBe(SudokuNumber value) {
+	return (!isSet() && mProductPossibilities % SudokuCoPrimeFromInt(value) == 0);
+}
+
 void SudokuCell::eliminateNumber(SudokuCoPrime::SudokuCoPrime value) {
 	// Check to ensure the number hasn't already been eliminated from the possibilities product
 	if (mProductPossibilities % value == 0) {
@@ -67,16 +72,17 @@ bool SudokuCell::checkOnePossibility() {
 	}
 }
 
-void SudokuCell::set(int value) {
-	mValue = SudokuNumberFromInt (value);
+void SudokuCell::set(SudokuNumber value) {
+	std::cout << value << std::endl;
+	mValue = value;
 	mProductPossibilities = 0;
 	mNumPossibilities = 1;
 }
 
 
-// Private
+// Global
 
-SudokuNumber SudokuCell::SudokuNumberFromInt (int value) {
+SudokuNumber SudokuNumberFromInt (int value) {
 	switch(value) {
 	case 1:		return SudokuNumber::ONE;		break;
 	case 2:		return SudokuNumber::TWO;		break;
@@ -91,7 +97,7 @@ SudokuNumber SudokuCell::SudokuNumberFromInt (int value) {
 	}
 }
 
-SudokuNumber SudokuCell::SudokuNumberFromSudokuCoPrime (SudokuCoPrime::SudokuCoPrime value) {
+SudokuNumber SudokuNumberFromSudokuCoPrime (SudokuCoPrime::SudokuCoPrime value) {
 	switch(value) {
 	case SudokuCoPrime::ONE:		return SudokuNumber::ONE;		break;
 	case SudokuCoPrime::TWO:		return SudokuNumber::TWO;		break;
@@ -106,17 +112,22 @@ SudokuNumber SudokuCell::SudokuNumberFromSudokuCoPrime (SudokuCoPrime::SudokuCoP
 	}
 }
 
-SudokuCoPrime::SudokuCoPrime SudokuCell::SudokuCoPrimeFromInt (int value) {
+SudokuCoPrime::SudokuCoPrime SudokuCoPrimeFromInt (int value) {
 	switch(value) {
-	case 1:		return SudokuCoPrime::ONE;			break;
-	case 2:		return SudokuCoPrime::TWO;			break;
-	case 3:		return SudokuCoPrime::THREE;		break;
-	case 4:		return SudokuCoPrime::FOUR;			break;
-	case 5:		return SudokuCoPrime::FIVE;			break;
-	case 6:		return SudokuCoPrime::SIX;			break;
-	case 7:		return SudokuCoPrime::SEVEN;		break;
-	case 8:		return SudokuCoPrime::EIGHT;		break;
-	case 9:		return SudokuCoPrime::NINE;			break;
+	case 1:							return SudokuCoPrime::ONE;			break;
+	case SudokuCoPrime::ONE:		return SudokuCoPrime::ONE;		break;
+	case 2:							return SudokuCoPrime::TWO;			break;
+	case SudokuCoPrime::TWO:		return SudokuCoPrime::TWO;		break;
+	case 3:							return SudokuCoPrime::THREE;		break;
+	case SudokuCoPrime::THREE:		return SudokuCoPrime::THREE;		break;
+	case 4:							return SudokuCoPrime::FOUR;			break;
+	case SudokuCoPrime::FOUR:		return SudokuCoPrime::FOUR;		break;
+	case 5:							return SudokuCoPrime::FIVE;			break;
+	case 6:							return SudokuCoPrime::SIX;			break;
+	case 7:							return SudokuCoPrime::SEVEN;		break;
+	case 8:							return SudokuCoPrime::EIGHT;		break;
+	case SudokuCoPrime::EIGHT:		return SudokuCoPrime::EIGHT;		break;
+	case 9:							return SudokuCoPrime::NINE;			break;
 	default:	return SudokuCoPrime::ALLPRODUCT;	break;
 	}
 }

@@ -28,22 +28,20 @@ public:
 	bool isSet();
 
 	void eliminateNumber(SudokuCoPrime::SudokuCoPrime);		// eliminates the co-prime from the possibilities and reduces the number of possibilities
+	bool canBe(SudokuNumber);								// returns true if the cell can take on the value of the SudokuNumber passed
 	bool checkOnePossibility();								// if there is only one possible value sets the value of the cell and returns true
-	void set(int);											// sets the cell to the int given
+	void set(SudokuNumber);											// sets the cell to the int given
 
 private:
 	SudokuNumber mValue;
 	int mProductPossibilities;
 	int mNumPossibilities;
 
-
-	SudokuNumber SudokuNumberFromInt (int value);
-	SudokuNumber SudokuNumberFromSudokuCoPrime (SudokuCoPrime::SudokuCoPrime value);
-	SudokuCoPrime::SudokuCoPrime SudokuCoPrimeFromInt (int value);
-
-
-
 };
+
+SudokuNumber SudokuNumberFromInt (int value);
+SudokuNumber SudokuNumberFromSudokuCoPrime (SudokuCoPrime::SudokuCoPrime value);
+SudokuCoPrime::SudokuCoPrime SudokuCoPrimeFromInt (int value);
 
 typedef std::shared_ptr<SudokuCell> SudokuCellPtr;
 SudokuCellPtr makeSudokuCellPtr(int value);

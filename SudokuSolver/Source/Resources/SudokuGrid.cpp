@@ -41,14 +41,15 @@ SudokuGrid::~SudokuGrid() {
 
 bool SudokuGrid::solve() {
 
-	setProductPossibilities();
 	while (!isSolved()) {
-		while (setByOnePossibility()) { }		// will continue to set by one possibility until it cannot anymore
-		if (!isSolved()) {
-			return true;
-		}
+		setProductPossibilities();
+		
+		// Will perform one or more of the following solving algorithms (basic -> more advanced)
+		if (setByOnePossibility()) { }
+		else if (setByOnlyOnePossibilityInSet()) { }
+		
 	}
-
+	
 	return true;
 }
 
@@ -99,7 +100,7 @@ bool SudokuGrid::setByOnePossibility() {
 	// Iterate through the row vectors, and check if only one possibility exists for values that have not been set yet.  If a value has been set, call eliminate on the corresponding row/column/box.
 	for (int row = 0; row < 9; ++row) {
 		for (std::vector<SudokuCellPtr>::iterator i = mRows[row].mCells.begin(); i != mRows[row].mCells.end(); ++i) {
-			if ((*i)->getNumber() == SudokuNumber::NONUM && (*i)->checkOnePossibility()) {
+			if (!(*i)->isSet() && (*i)->checkOnePossibility()) {
 				mRows[row].eliminateCoPrime((*i)->getCoPrime());
 				mColumns[i - mRows[row].mCells.begin()].eliminateCoPrime((*i)->getCoPrime());
 				mBoxes[3*(row/3) + ((i - mRows[row].mCells.begin())/3)].eliminateCoPrime((*i)->getCoPrime());
@@ -109,4 +110,18 @@ bool SudokuGrid::setByOnePossibility() {
 	}
 	
 	return setAtLeastOneValue;
+}
+
+bool SudokuGrid::setByOnlyOnePossibilityInSet() {
+	bool setAtLeastOneValue = false;
+
+	// Iterate through all the row vectors, then column, then boxes to see if any values can be set
+	for (int i = 0; i < 9; ++i) {
+		setAtLeastOneValue = (mRows[i].setByOnePossibility() || setAtLeastOneValue);
+		setAtLeastOneValue = (mColumns[i].setByOnePossibility() || setAtLeastOneValue);
+		setAtLeastOneValue = (mBoxes[i].setByOnePossibility() || setAtLeastOneValue);
+	}
+
+	return setAtLeastOneValue;
+
 }

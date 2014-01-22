@@ -23,7 +23,10 @@ private:
 	bool isSolved();
 	
 	void setProductPossibilities();		// Iterates through the grid and eliminates product possibilities
-	bool setByOnePossibility();
+	
+	// solving algorithms
+	bool setByOnePossibility();				// Scans the whole grid for any boxes where only one value can go
+	bool setByOnlyOnePossibilityInSet();	// Scans the SudokuSets, and places a value if it can only be in one location in the set
 
 	SudokuRow mRows[9];
 	SudokuColumn mColumns[9];

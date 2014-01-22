@@ -17,6 +17,8 @@ public:
 
 	void eliminateCoPrime(SudokuCoPrime::SudokuCoPrime);
 
+	bool setByOnePossibility();
+
 	std::vector<SudokuCellPtr> mCells;
 
 protected:	
