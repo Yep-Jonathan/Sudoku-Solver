@@ -76,3 +76,30 @@ bool SudokuSet::setByOnePossibility() {
 
 	return setAtLeastOneValue;
 }
+
+bool SudokuSet::eliminateByPairs() {
+	bool eliminateAtLeastOne = false;
+
+	// Checks the set for two empty cells that have the SAME AND ONLY two possibilities.  If so, eliminate these two possibilities from the row/column/box
+	for (std::vector<SudokuCellPtr>::iterator i = mCells.begin(); i != mCells.end(); ++i) {
+		if (!(*i)->isSet() && (*i)->getNumPossibilities() == 2) {
+			for (std::vector<SudokuCellPtr>::iterator j = i+1; j != mCells.end(); ++j) {
+				if (!(*j)->isSet() && (*j)->getNumPossibilities() == 2 && (*i)->getProductPossibilites() == (*j)->getProductPossibilites()) {
+					// We now have to find the two co-primes to eliminate from the cells, and make sure to NOT eliminate them from *i and *j
+					SudokuCoPrime::SudokuCoPrimePair pair = SudokuCoPrime::findPair((*i)->getProductPossibilites());
+
+					for (std::vector<SudokuCellPtr>::iterator k = mCells.begin(); k != mCells.end(); ++k) {
+						if (!(*k)->isSet() && k != i && k != j) {
+							(*k)->eliminateNumber(pair.first);
+							(*k)->eliminateNumber(pair.second);
+							eliminateAtLeastOne = true;
+						}
+					}
+
+				}
+			}
+		}
+	}
+
+	return eliminateAtLeastOne;
+}

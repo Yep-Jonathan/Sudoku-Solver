@@ -19,6 +19,7 @@ public:
 	void eliminateCoPrimeWithSkip(SudokuCoPrime::SudokuCoPrime, int skip);		// eliminate the number, skipping the corresponding box (0, 1, or 2 wrt the row/column)
 
 	bool setByOnePossibility();
+	bool eliminateByPairs();
 
 	std::vector<SudokuCellPtr> mCells;
 

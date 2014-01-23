@@ -11,6 +11,14 @@ enum SudokuNumber { NONUM = 0, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, N
 namespace SudokuCoPrime {
 	enum SudokuCoPrime { ONE = 11, TWO = 17, THREE = 13, FOUR = 19, FIVE = 5,
 		SIX = 6, SEVEN = 7, EIGHT = 23, NINE = 9, ALLPRODUCT = 2007835830 };
+
+	class SudokuCoPrimePair {
+	public:
+		SudokuCoPrime first;
+		SudokuCoPrime second;
+	};
+
+	SudokuCoPrimePair findPair(int);
 };
 
 
@@ -30,7 +38,10 @@ public:
 	void eliminateNumber(SudokuCoPrime::SudokuCoPrime);		// eliminates the co-prime from the possibilities and reduces the number of possibilities
 	bool canBe(SudokuNumber);								// returns true if the cell can take on the value of the SudokuNumber passed
 	bool checkOnePossibility();								// if there is only one possible value sets the value of the cell and returns true
-	void set(SudokuNumber);											// sets the cell to the int given
+	void set(SudokuNumber);									// sets the cell to the int given
+
+	int getNumPossibilities() const;
+	int getProductPossibilites() const;
 
 private:
 	SudokuNumber mValue;

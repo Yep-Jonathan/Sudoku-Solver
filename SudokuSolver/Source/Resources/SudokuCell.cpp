@@ -6,6 +6,8 @@ SudokuCellPtr makeSudokuCellPtr (int value) {
 	return std::make_shared<SudokuCell>(value);
 }
 
+
+
 SudokuCell::SudokuCell() {
 	mValue = SudokuNumber::NONUM;
 	mProductPossibilities = SudokuCoPrime::ALLPRODUCT;
@@ -77,6 +79,14 @@ void SudokuCell::set(SudokuNumber value) {
 	mNumPossibilities = 1;
 }
 
+int SudokuCell::getNumPossibilities() const {
+	return mNumPossibilities;
+}
+
+int SudokuCell::getProductPossibilites() const {
+	return mProductPossibilities;
+}
+
 
 // Global
 
@@ -130,3 +140,20 @@ SudokuCoPrime::SudokuCoPrime SudokuCoPrimeFromInt (int value) {
 	}
 }
 
+// Finds the two co-primes that multiply to Value (SudokuCoPrime namespace)
+SudokuCoPrime::SudokuCoPrimePair SudokuCoPrime::findPair(int value) {
+	SudokuCoPrimePair ret;
+	// large if statement to find which is the correct multiplicity -- can this be improved?
+	if ((value % ONE) == 0) { ret.first = ONE; ret.second = ::SudokuCoPrimeFromInt(value / ONE); }
+	else if ((value % TWO) == 0) { ret.first = TWO; ret.second = ::SudokuCoPrimeFromInt(value / TWO); }
+	else if ((value % THREE) == 0) { ret.first = THREE; ret.second = ::SudokuCoPrimeFromInt(value / THREE); }
+	else if ((value % FOUR) == 0) { ret.first = FOUR; ret.second = ::SudokuCoPrimeFromInt(value / FOUR); }
+	else if ((value % FIVE) == 0) { ret.first = FIVE; ret.second = ::SudokuCoPrimeFromInt(value / FIVE); }
+	else if ((value % SIX) == 0) { ret.first = SIX; ret.second = ::SudokuCoPrimeFromInt(value / SIX); }
+	else if ((value % SEVEN) == 0) { ret.first = SEVEN; ret.second = ::SudokuCoPrimeFromInt(value / SEVEN); }
+	else if ((value % EIGHT) == 0) { ret.first = EIGHT; ret.second = ::SudokuCoPrimeFromInt(value / EIGHT); }
+	else if ((value % NINE) == 0) { ret.first = NINE; ret.second = ::SudokuCoPrimeFromInt(value / NINE); }		// Should never go here
+	else { }
+
+	return ret;
+}

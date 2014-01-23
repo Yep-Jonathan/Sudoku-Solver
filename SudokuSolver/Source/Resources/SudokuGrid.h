@@ -29,6 +29,7 @@ private:
 	bool setByOnlyOnePossibilityInSet();	// Scans the SudokuSets, and places a value if it can only be in one location in the set
 
 	bool eliminateByBoxes();
+	bool eliminateByPairs();
 
 	SudokuRow mRows[9];
 	SudokuColumn mColumns[9];

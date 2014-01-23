@@ -43,16 +43,17 @@ bool SudokuGrid::solve() {
 	int count = 0;
 
 	while (!isSolved()) {
+		//print();
 		setProductPossibilities();
 		
 		// Will perform one or more of the following solving algorithms (basic -> more advanced)
 		if (setByOnePossibility()) { }
 		else if (setByOnlyOnePossibilityInSet()) { }
-		else if (eliminateByBoxes()) { }
+		else if (eliminateByBoxes() && eliminateByPairs()) { }
 
 		++count;
 		// At least one value should be set each iteration
-		if (count > 200) {
+		if (count > 81) {
 			print();
 			return false;
 		}
@@ -193,4 +194,18 @@ bool SudokuGrid::eliminateByBoxes() {
 	}
 
 	return eliminateAtLeastOneValue;
+}
+
+bool SudokuGrid::eliminateByPairs() {
+	bool eliminateAtLeastOneValue = false;
+
+	// Iterate through all the row vectors, then column, then boxes to see if any values can be set
+	for (int i = 0; i < 9; ++i) {
+		eliminateAtLeastOneValue = (mRows[i].eliminateByPairs() || eliminateAtLeastOneValue);
+		eliminateAtLeastOneValue = (mColumns[i].eliminateByPairs() || eliminateAtLeastOneValue);
+		eliminateAtLeastOneValue = (mBoxes[i].eliminateByPairs() || eliminateAtLeastOneValue);
+	}
+
+	return eliminateAtLeastOneValue;
+
 }
